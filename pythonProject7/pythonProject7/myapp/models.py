@@ -18,7 +18,7 @@ class Student(models.Model):
     student_card_number = models.CharField(max_length=50, unique=True)
     email = models.EmailField(blank=True)
 
-    def __self__(self):
+    def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
 
@@ -44,7 +44,7 @@ class LibraryCard(models.Model):
 class Literature(models.Model):
     title = models.CharField(max_length=255)
     genre = models.CharField(max_length=100)
-    publication_date =models.DateField()
+    publication_date = models.DateField()
     year_of_publication = models.IntegerField()
 
     def __str__(self):
