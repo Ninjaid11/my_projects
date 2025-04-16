@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+</head>
+<body>
+
+<h1>Корзина</h1>
+<table border="1">
+    <tr>
+        <th>Имя</th>
+        <th>Продукты</th>
+        <th>Цены</th>
+    </tr>
+    {% for item in baskets %}
+    <tr>
+        <td>{{ item.name }}</td>
+        <td>
+            <ul>
+                {% for product in item.product.all %}
+                    <li>{{ product.name }}</li>
+                {% endfor %}
+            </ul>
+        </td>
+        <td>
+            <ul>
+                {% for product in item.product.all %}
+                    <li>{{ product.price }}</li>
+                {% endfor %}
+            </ul>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
