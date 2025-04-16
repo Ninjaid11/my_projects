@@ -5,11 +5,15 @@ def example_func():
     return ["1", "faf", "ad"]
 
 
+# Дитина (один до одного)
 class Child(models.Model):
     id = models.AutoField(primary_key=True)
     age = models.IntegerField(default=18)
     email = models.EmailField(default=255, unique=True)
     fav_toy = models.CharField(max_length=255, blank=False, default="")
+
+    def __str__(self):
+        return f"Child {self.id}, Age: {self.age}"
 
 
 class Student(models.Model):
@@ -17,6 +21,7 @@ class Student(models.Model):
     last_name = models.CharField(max_length=100)
     student_card_number = models.CharField(max_length=50, unique=True)
     email = models.EmailField(blank=True)
+    group = models.ForeignKey('Group', on_delete=models.CASCADE, related_name="students", blank=True, null=True)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -32,7 +37,7 @@ class Group(models.Model):
 
 
 class LibraryCard(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.OneToOneField(Student, on_delete=models.CASCADE)
     issue_date = models.DateField()
     expiration_date = models.DateField()
     price = models.FloatField()
