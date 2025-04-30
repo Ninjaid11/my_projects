@@ -1,30 +1,37 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Product</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
+{% load humanize %}
 
-    <main>
-    <section>
-      <ul>
+{% block title %}Product List{% endblock %}
+
+{% block content %}
+<main>
+  <section>
+    <ul>
       {% for product in all_product %}
         <li>
-            <p>
-              <img src="static/img/{{ product.photo }}", alt="Product 1">
-              <h3>{{product.name}}</h3>
-              <p>{{product.description }}</p>
-              <button>{{product.price}}</button>
-              <button>Add to Cart</button>
-            </p>
+          <p>
+            <img src="{% static 'img/' %}{{ product.photo }}" alt="Product image">
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+            <button>{{ product.price | intcomma }}</button>
+            <button>Add to Cart</button>
+          </p>
         </li>
       {% endfor %}
-      </ul>
-    </section>
-  </main>
+    </ul>
+  </section>
 
-</body>
-</html>
+  <div class="pagination">
+    {% if page.has_previous %}
+      <a href="?page={{ page.previous_page_number }}">← Назад</a>
+    {% endif %}
+
+    <span>Страница {{ page.number }} из {{ page.paginator.num_pages }}</span>
+
+    {% if page.has_next %}
+      <a href="?page={{ page.next_page_number }}">Вперёд →</a>
+    {% endif %}
+  </div>
+</main>
+{% endblock %}
