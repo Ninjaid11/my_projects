@@ -6,7 +6,7 @@ from .models import MainProduct, TopProduct, Product
 
 def home(request):
     top_products = TopProduct.objects.all()
-    main_products = Product.objects.exclude(id__in=[product.product.id for product in top_products]) # Иза проблемы пришлось зделайть так
+    main_products = Product.objects.exclude(id__in=[product.product.id for product in top_products])
     return render(request, 'home.html', {
         'main_products': main_products,
         'top_products': top_products
