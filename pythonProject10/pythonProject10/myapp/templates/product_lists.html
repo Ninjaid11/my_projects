@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Product List - GoITeens Shop{% endblock %}
+
+{% block content %}
+  <h2>Product List</h2>
+  
+  <h3>Main Products</h3>
+  <div class="row">
+    {% for product in main_products %}
+      <div class="col-md-4">
+        <div class="card">
+          <img src="{{ product.product.image.url }}" class="card-img-top" alt="{{ product.product.name }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ product.product.name }}</h5>
+            <p class="card-text">{{ product.product.description }}</p>
+            <p class="card-text"><strong>Price:</strong> ${{ product.product.price }}</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <h3>Top Products</h3>
+  <div class="row">
+    {% for product in top_products %}
+      <div class="col-md-4">
+        <div class="card">
+          <img src="{{ product.product.image.url }}" class="card-img-top" alt="{{ product.product.name }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ product.product.name }}</h5>
+            <p class="card-text">{{ product.product.description }}</p>
+            <p class="card-text"><strong>Price:</strong> ${{ product.product.price }}</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

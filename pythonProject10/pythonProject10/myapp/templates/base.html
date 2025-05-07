@@ -1,27 +1,38 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}GoITeens Shop{% endblock %}</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-  <header>
-    <h1>GoITeens Shop</h1>
-    <nav>
-      <ul>
-        <li><a href="#" target="_blank">Home</a></li>
-        <li><a href="#">Shop</a></li>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Contact Us</a></li>
-      </ul>
-    </nav>
+  <header class="bg-primary text-white p-3">
+    <div class="container">
+      <h1>GoITeens Shop</h1>
+      <nav>
+        <ul class="nav">
+          <li class="nav-item"><a class="nav-link text-white" href="{% url 'home' %}">Home</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="{% url 'add_product' %}">Add Product</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="{% url 'login' %}">Login</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-  {% block content %}
-  {% endblock %}
+  <div class="container my-4">
+    {% block content %}
+    {% endblock %}
+  </div>
 
-  <footer>
+  <footer class="bg-dark text-white text-center py-3">
     <p>&copy; 2023 GoITeens. All rights reserved.</p>
   </footer>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

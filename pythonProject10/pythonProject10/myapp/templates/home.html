@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - GoITeens Shop{% endblock %}
+
+{% block content %}
+  <h2>Welcome to GoITeens Shop!</h2>
+  <p>Find the best products for teens at affordable prices.</p>
+
+  <h3>Top Products</h3>
+  <div class="row">
+    {% for product in top_products %}
+      <div class="product-card">
+        <h5>{{ product.product.name }}</h5>
+        <p>{{ product.product.description }}</p>
+        <p><strong>Price:</strong> ${{ product.product.price }}</p>
+        <a href="{% url 'product_detail' product.product.id %}" class="btn btn-info">View Details</a>
+      </div>
+    {% endfor %}
+  </div>
+
+  <h3>Main Products</h3>
+  <div class="row">
+    {% for product in main_products %}
+      <div class="product-card">
+        <h5>{{ product.name }}</h5>
+        <p>{{ product.description }}</p>
+        <p><strong>Price:</strong> ${{ product.price }}</p>
+        <a href="{% url 'product_detail' product.id %}" class="btn btn-info">View Details</a>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
