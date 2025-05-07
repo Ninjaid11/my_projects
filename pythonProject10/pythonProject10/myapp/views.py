@@ -37,7 +37,7 @@ def login_view(request):
                 login(request, user)
                 return redirect('home')
             else:
-                form.add_error(None, 'Неверный логин или пароль')
+                form.add_error(None, 'BAN')
     else:
         form = LoginForm()
 
