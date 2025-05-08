@@ -1,47 +1,18 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
-from .forms import ProductForm, RegisterForm, LoginForm
-from .models import MainProduct, TopProduct, Product
+from django.shortcuts import render, redirect
+from django.contrib.auth import logout
+from .forms import ProductForm
+from .models import Product
 
+
+# views.py
 
 def home(request):
-    top_products = TopProduct.objects.all()
-    main_products = Product.objects.exclude(id__in=[product.product.id for product in top_products])
+    top_products = Product.objects.filter(is_top=True)
+    main_products = Product.objects.filter(is_top=False)
     return render(request, 'home.html', {
+        'top_products': top_products,
         'main_products': main_products,
-        'top_products': top_products
     })
-
-
-def register(request):
-    if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
-    else:
-        form = RegisterForm()
-
-    return render(request, 'register.html', {'form': form})
-
-
-def login_view(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-
-            if user is not None:
-                login(request, user)
-                return redirect('home')
-            else:
-                form.add_error(None, 'BAN')
-    else:
-        form = LoginForm()
-
-    return render(request, 'login.html', {'form': form})
 
 
 def user_logout(request):
@@ -68,15 +39,10 @@ def product_lists_admin(request):
     if not request.user.is_superuser:
         return redirect('home')
 
-    top = TopProduct.objects.all()
-    main = MainProduct.objects.all()
+    top = Product.objects.filter(is_top=True)
+    main = Product.objects.filter(is_top=False)
 
     return render(request, 'product_lists.html', {
         'top': top,
         'main': main
     })
-
-
-def product_detail(request, id):
-    product = get_object_or_404(Product, id=id)
-    return render(request, 'product_detail.html', {'product': product})

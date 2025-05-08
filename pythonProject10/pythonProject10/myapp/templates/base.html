@@ -9,18 +9,31 @@
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-  <header class="bg-primary text-white p-3">
-    <div class="container">
-      <h1>GoITeens Shop</h1>
-      <nav>
-        <ul class="nav">
-          <li class="nav-item"><a class="nav-link text-white" href="{% url 'home' %}">Home</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="{% url 'add_product' %}">Add Product</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="{% url 'login' %}">Login</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+<header class="bg-primary text-white p-3">
+  <div class="container d-flex justify-content-between align-items-center">
+    <h1 class="mb-0">GoITeens Shop</h1>
+    <nav>
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link text-white" href="{% url 'home' %}">Home</a>
+        </li>
+        {% if user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'add_product' %}">Add Product</a>
+          </li>
+        {% endif %}
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <form action="{% url 'logout' %}" method="post" class="d-inline">
+              {% csrf_token %}
+              <a class="nav-link text-white" href="{% url 'logout' %}">Выйти</a>
+            </form>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</header>
 
   <div class="container my-4">
     {% block content %}
