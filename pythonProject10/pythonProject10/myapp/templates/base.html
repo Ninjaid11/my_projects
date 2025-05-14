@@ -12,25 +12,38 @@
 <header class="bg-primary text-white p-3">
   <div class="container d-flex justify-content-between align-items-center">
     <h1 class="mb-0">GoITeens Shop</h1>
-    <nav>
-      <ul class="nav">
-        <li class="nav-item">
-          <a class="nav-link text-white" href="{% url 'home' %}">Home</a>
-        </li>
-        {% if user.is_superuser %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link text-white" href="{% url 'add_product' %}">Add Product</a>
+            <a class="nav-link text-white" href="{% url 'home' %}">Home</a>
           </li>
-        {% endif %}
-        {% if user.is_authenticated %}
-          <li class="nav-item">
-            <form action="{% url 'logout' %}" method="post" class="d-inline">
-              {% csrf_token %}
-              <a class="nav-link text-white" href="{% url 'logout' %}">Выйти</a>
-            </form>
-          </li>
-        {% endif %}
-      </ul>
+          {% if user.is_superuser %}
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'add_product' %}">Add Product</a>
+            </li>
+          {% endif %}
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <form action="{% url 'logout' %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link nav-link text-white">Выйти</button>
+              </form>
+            </li>
+          {% endif %}
+          {% if not user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'login' %}">Войти</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'register' %}">Регистрация</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
     </nav>
   </div>
 </header>
