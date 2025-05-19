@@ -15,6 +15,7 @@ from django.http import HttpResponse
 
 # views.py
 
+
 def home(request):
     top_products = Product.objects.filter(is_top=True)
     main_products = Product.objects.filter(is_top=False)
