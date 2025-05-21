@@ -2,13 +2,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.db.models import Q
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import logout, login, authenticate
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from .forms import ProductForm, RegisterForm
-from .models import Product
+from .models import Product, CartItem
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.contrib.auth import login as auth_login
 from django.http import HttpResponse
@@ -125,3 +125,35 @@ def password_reset_request(request):
                     return redirect ("registration/password_reset/done/")
     password_reset_form = PasswordResetForm()
     return render(request=request, template_name="registration/password_reset.html", context={"password_reset_form":password_reset_form})
+
+
+def delete_product(request, product_id):
+    if not request.user.is_superuser:
+        return redirect('home')
+
+    try:
+        product = Product.objects.get(id=product_id)
+        # Удаляем из корзины
+        CartItem.objects.filter(product=product).delete()
+        product.delete()
+    except Product.DoesNotExist:
+        pass
+
+    return redirect('home')
+
+
+def add_to_cart(request, product_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    product = get_object_or_404(Product, id=product_id)
+    CartItem.objects.get_or_create(user=request.user, product=product)
+    return redirect('home')
+
+
+def cart_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    cart_items = CartItem.objects.filter(user=request.user)
+    return render(request, 'cart.html', {'cart_items': cart_items})

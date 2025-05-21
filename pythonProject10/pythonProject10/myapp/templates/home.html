@@ -13,6 +13,19 @@
         <h5>{{ product.name }}</h5>
         <p>{{ product.description }}</p>
         <p><strong>Price:</strong> ${{ product.price }}</p>
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'add_to_cart' product.id %}">
+            {% csrf_token %}
+            <button type="submit">Добавить в корзину</button>
+          </form>
+        {% endif %}
+
+        {% if user.is_superuser %}
+          <form method="post" action="{% url 'delete_product' product.id %}">
+            {% csrf_token %}
+            <button type="submit">Удалить товар</button>
+          </form>
+        {% endif %}
       </div>
     {% endfor %}
   </div>
@@ -24,6 +37,19 @@
         <h5>{{ product.name }}</h5>
         <p>{{ product.description }}</p>
         <p><strong>Price:</strong> ${{ product.price }}</p>
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'add_to_cart' product.id %}">
+            {% csrf_token %}
+            <button type="submit">Добавить в корзину</button>
+          </form>
+        {% endif %}
+
+        {% if user.is_superuser %}
+          <form method="post" action="{% url 'delete_product' product.id %}">
+            {% csrf_token %}
+            <button type="submit">Удалить товар</button>
+          </form>
+        {% endif %}
       </div>
     {% endfor %}
   </div>

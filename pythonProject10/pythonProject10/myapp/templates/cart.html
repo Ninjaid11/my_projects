@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - GoITeens Shop{% endblock %}
+
+{% block content %}
+    <h1>Ваша корзина</h1>
+    <ul>
+      {% for item in cart_items %}
+        <li>{{ item.product.name }} - {{ item.product.price }} грн</li>
+      {% endfor %}
+    </ul>
+{% endblock %}
