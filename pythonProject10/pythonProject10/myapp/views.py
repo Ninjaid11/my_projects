@@ -133,7 +133,6 @@ def delete_product(request, product_id):
 
     try:
         product = Product.objects.get(id=product_id)
-        # Удаляем из корзины
         CartItem.objects.filter(product=product).delete()
         product.delete()
     except Product.DoesNotExist:
