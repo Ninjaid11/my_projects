@@ -146,8 +146,23 @@ def add_to_cart(request, product_id):
         return redirect('login')
 
     product = get_object_or_404(Product, id=product_id)
-    CartItem.objects.get_or_create(user=request.user, product=product)
+
+    cart_item, created = CartItem.objects.get_or_create(user=request.user, product=product)
+    if not created:
+        cart_item.count += 1
+    cart_item.save()
+
     return redirect('home')
+
+
+def remove_from_cart(request, product_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    cart_item = get_object_or_404(CartItem, user=request.user, product_id=product_id)
+    cart_item.delete()
+
+    return redirect('cart')
 
 
 def cart_view(request):

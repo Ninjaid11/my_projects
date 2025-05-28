@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}Home - GoITeens Shop{% endblock %}
+{% load static %}
 
 {% block content %}
   <h2>Welcome to GoITeens Shop!</h2>
@@ -10,6 +11,7 @@
   <div class="row">
     {% for product in top_products %}
       <div class="product-card">
+        <img src="{% static 'img/' %}{{ product.photo }}" alt="Product image">
         <h5>{{ product.name }}</h5>
         <p>{{ product.description }}</p>
         <p><strong>Price:</strong> ${{ product.price }}</p>
@@ -34,6 +36,7 @@
   <div class="row">
     {% for product in main_products %}
       <div class="product-card">
+        <img src="{% static 'img/' %}{{ product.photo }}" alt="Product image">
         <h5>{{ product.name }}</h5>
         <p>{{ product.description }}</p>
         <p><strong>Price:</strong> ${{ product.price }}</p>
