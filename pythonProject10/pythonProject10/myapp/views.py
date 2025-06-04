@@ -1,3 +1,5 @@
+import time
+
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
@@ -11,7 +13,10 @@ from .forms import ProductForm, RegisterForm
 from .models import Product, CartItem
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.contrib.auth import login as auth_login
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
+from time import sleep
 
 # views.py
 
@@ -171,3 +176,24 @@ def cart_view(request):
 
     cart_items = CartItem.objects.filter(user=request.user)
     return render(request, 'cart.html', {'cart_items': cart_items})
+
+
+def long_request(request):
+    time.sleep(5)
+    all_rows = Product.objects.values()
+    return list(all_rows)
+
+
+def test_cache(request):
+    data = cache.get_or_set(
+        "product:all",
+        long_request(request),
+        timeout=10
+    )
+    return JsonResponse(data, safe=False)
+
+
+@cache_page(5)
+def test_cache2(request):
+    all_rows = Product.objects.all()
+    return render(request, 'cache.html', {"products": all_rows})

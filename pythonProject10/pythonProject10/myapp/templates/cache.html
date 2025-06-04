@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Cache{% endblock %}
+
+{% block content %}
+
+    {% for product in products %}
+        <li>
+            <p>
+                <h3>{{ product.name }}</h3>
+                <h3>{{ product.price }}</h3>
+            </p>
+        </li>
+    {% endfor %}
+{% endblock %}
