@@ -4,6 +4,6 @@
 
 ```bash
 - pip install -r requirements.txt
-- cd shop
+- cd pythonProject10
 - python manage.py runserver
 ```
