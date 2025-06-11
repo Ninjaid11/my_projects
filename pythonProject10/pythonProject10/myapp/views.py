@@ -1,22 +1,28 @@
-import time
 
-from django.contrib.auth.models import User
+import time
+from time import sleep
+
+
+from django.contrib.auth import logout, login, authenticate
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth import login as auth_login
 from django.core.mail import send_mail
 from django.db.models import Q
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import logout, login, authenticate
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-from .forms import ProductForm, RegisterForm
-from .models import Product, CartItem
-from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
-from django.contrib.auth import login as auth_login
-from django.http import HttpResponse, JsonResponse
+from django.urls import reverse
+
 from django.core.cache import cache
 from django.views.decorators.cache import cache_page
-from time import sleep
+
+from .forms import ProductForm, RegisterForm, CommentForm
+from .models import Product, CartItem, Comment
+
 
 # views.py
 
@@ -85,6 +91,34 @@ def product_lists_admin(request):
         'top': top,
         'main': main
     })
+
+
+def get_product(request, product_id: int):
+    try:
+        product = Product.objects.get(pk=product_id)
+    except Exception as e:
+        return render(request, "404.html")
+
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            new_comment = Comment(
+                user=request.user,
+                product=product,
+                content=comment_form.cleaned_data["content"]
+            )
+            new_comment.save()
+            return redirect(reverse("product", kwargs={"product_id": product_id}))
+        return redirect(reverse("product", kwargs={"product_id": product_id}))
+
+    comments = Comment.objects.filter(product=product)
+    comment_form = CommentForm()
+    context = {
+        'product': product,
+        'comments': comments,
+        'comment_form': comment_form
+    }
+    return render(request, 'product.html', context=context)
 
 
 def set_cookies(request):
