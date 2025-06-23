@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure--lv8!pp33or(^41fyath(1xqrl0mybp%xw5i%hgvdqpm23wn-z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -38,10 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'corsheaders',
+    'api'
 
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -135,3 +139,8 @@ CACHES = {
         "LOCATION": "my_cache_table",
     }
 }
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080"
+]
