@@ -28,7 +28,7 @@
         <h3></h3>
         <h3></h3>
         {% if user.is_authenticated %}
-          <form method="post">
+          <form method="post" id="comment-form">
               {% csrf_token %}
               {{ comment_form }}
               <button class="btn btn-primary" type="submit">Create</button>
@@ -44,3 +44,18 @@
       </div>
   </div>
 {% endblock %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('comment-form');
+  if (form) {
+    const contentField = document.getElementById('comment-content');
+    form.addEventListener('submit', function (e) {
+      if (!contentField || !contentField.value.trim()) {
+        alert("Коментар не може бути порожнім!");
+        e.preventDefault();
+      }
+    });
+  }
+});
+</script>

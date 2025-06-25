@@ -5,9 +5,38 @@
 {% block content %}
   <h2>Add a New Product</h2>
   
-  <form method="POST" enctype="multipart/form-data">
+  <form method="POST" enctype="multipart/form-data" id="product-form">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-success">Add Product</button>
   </form>
 {% endblock %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('product-form');
+  form.addEventListener('submit', function (e) {
+    const name = document.getElementById('id_name');
+    const price = document.getElementById('id_price');
+    const photo = document.getElementById('id_photo');
+
+    if (!name.value.trim()) {
+      alert('Будь ласка, введіть назву продукту.');
+      e.preventDefault();
+      return;
+    }
+
+    if (!price.value.trim() || isNaN(price.value) || Number(price.value) <= 0) {
+      alert('Будь ласка, введіть коректну ціну.');
+      e.preventDefault();
+      return;
+    }
+
+    if (!photo.value) {
+      alert('Будь ласка, додайте фото продукту.');
+      e.preventDefault();
+      return;
+    }
+  });
+});
+</script>

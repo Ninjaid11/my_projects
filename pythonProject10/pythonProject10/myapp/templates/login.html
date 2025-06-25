@@ -5,9 +5,25 @@
 {% block content %}
   <h2>Login to Your Account</h2>
   
-  <form method="POST">
+  <form method="POST" id="login-form">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Login</button>
   </form>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('login-form');
+
+    form.addEventListener('submit', function (e) {
+      const username = document.getElementById('id_username');
+      const password = document.getElementById('id_password');
+
+      if (!username.value || !password.value) {
+        alert("Будь ласка, заповніть логін та пароль.");
+        e.preventDefault();
+      }
+    });
+  });
+  </script>
 {% endblock %}
