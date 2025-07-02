@@ -1,0 +1,20 @@
+[2025-07-02 20:46:53,766] INFO | django.utils.autoreload | 👤 IvanLog: Watching for file changes with StatReloader
+[2025-07-02 20:46:56,040] INFO | django.server | 👤 IvanLog: "GET / HTTP/1.1" 200 3891
+[2025-07-02 20:46:56,075] INFO | django.server | 👤 IvanLog: "GET /static/css/style.css HTTP/1.1" 200 1312
+[2025-07-02 20:46:56,164] INFO | django.server | 👤 IvanLog: "GET /static/img/3.jpg HTTP/1.1" 200 5660
+[2025-07-02 20:46:56,165] INFO | django.server | 👤 IvanLog: "GET /static/img/1.jpg HTTP/1.1" 200 4734
+[2025-07-02 20:46:56,165] INFO | django.server | 👤 IvanLog: "GET /static/img/2.jpg HTTP/1.1" 200 5857
+[2025-07-02 20:46:56,285] WARNING | django.request | 👤 IvanLog: Not Found: /favicon.ico
+[2025-07-02 20:46:56,285] WARNING | django.server | 👤 IvanLog: "GET /favicon.ico HTTP/1.1" 404 6491
+[2025-07-02 20:47:26,620] INFO | django.server | 👤 IvanLog: "GET /cart/ HTTP/1.1" 302 0
+[2025-07-02 20:47:26,635] INFO | django.server | 👤 IvanLog: "GET /login/ HTTP/1.1" 200 3143
+[2025-07-02 20:47:40,175] INFO | django.server | 👤 IvanLog: "POST /login/ HTTP/1.1" 200 3296
+[2025-07-02 20:47:50,464] INFO | django.server | 👤 IvanLog: "POST /login/ HTTP/1.1" 302 0
+[2025-07-02 20:47:50,473] INFO | django.server | 👤 IvanLog: "GET / HTTP/1.1" 200 7079
+[2025-07-02 20:47:57,488] INFO | django.server | 👤 IvanLog: "GET /add/ HTTP/1.1" 200 3273
+[2025-07-02 20:48:06,851] INFO | django.server | 👤 IvanLog: "POST /add/ HTTP/1.1" 302 0
+[2025-07-02 20:48:06,858] INFO | django.server | 👤 IvanLog: "GET / HTTP/1.1" 200 7973
+[2025-07-02 20:48:06,942] WARNING | django.server | 👤 IvanLog: "GET /static/img/fe HTTP/1.1" 404 1832
+[2025-07-02 20:48:41,123] INFO | django.server | 👤 IvanLog: "POST /delete_product/17/ HTTP/1.1" 302 0
+[2025-07-02 20:48:41,132] INFO | django.server | 👤 IvanLog: "GET / HTTP/1.1" 200 7079
+[2025-07-02 20:48:41,403] WARNING | django.request | 👤 IvanLog: Not Found: /favicon.ico

@@ -1,9 +1,10 @@
-
+import logging
 import time
 from time import sleep
+import logging
 
 
-from django.contrib.auth import logout, login, authenticate
+from django.contrib.auth import logout, login, authenticate, get_user
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
@@ -25,11 +26,13 @@ from .models import Product, CartItem, Comment
 
 
 # views.py
-
+logger = logging.getLogger(__name__)
 
 def home(request):
+    logger.info("Start processing")
     top_products = Product.objects.filter(is_top=True)
     main_products = Product.objects.filter(is_top=False)
+    logger.info("End processing")
     return render(request, 'home.html', {
         'top_products': top_products,
         'main_products': main_products,
@@ -42,10 +45,15 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            logger.info(f"Пользователь {user.username} успешно зарегистрировался и вошёл в систему.")
             return redirect('home')
+        else:
+            logger.warning("Ошибка валидации формы регистрации.")
     else:
         form = RegisterForm()
+
     return render(request, 'register.html', {'form': form})
+
 
 
 def login_view(request):
@@ -54,26 +62,39 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
+            logger.info(f"Пользователь {user.username} успешно вошёл в систему.")
             return redirect('home')
+        else:
+            logger.warning("Ошибка валидации формы входа.")
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
 
 
 def user_logout(request):
+    user = get_user(request)
     logout(request)
+    if user.is_authenticated:
+        logger.info(f"Пользователь {user.username} успешно вышёл из системы.")
+    else:
+        logger.info("Гость вышел из системы.")
     return redirect('/')
 
 
 def add_product(request):
     if not request.user.is_superuser:
+        logger.warning(f"Пользователь {request.user} пытался добавить продукт без прав.")
         return redirect('home')
 
     if request.method == 'POST':
         form = ProductForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('home')
+            try:
+                form.save()
+                logger.info(f"Пользователь {request.user.username} успешно вышёл добавил продукт.")
+                return redirect('home')
+            except Exception as e:
+                logger.error(f"Ошибка при добавлении продукта: {e}", exc_info=True)
     else:
         form = ProductForm()
 
@@ -97,6 +118,7 @@ def get_product(request, product_id: int):
     try:
         product = Product.objects.get(pk=product_id)
     except Exception as e:
+        logger.warning(f"Продукт с id={product_id} не найден")
         return render(request, "404.html")
 
     if request.method == 'POST':
@@ -107,7 +129,11 @@ def get_product(request, product_id: int):
                 product=product,
                 content=comment_form.cleaned_data["content"]
             )
-            new_comment.save()
+            try:
+                new_comment.save()
+                logger.info(f"Пользователь {request.user.username} добавил коментарий к продукту id={product_id}..")
+            except Exception as e:
+                logger.error(f"Ошибка при сохранении комментария: {e}", exc_info=True)
             return redirect(reverse("product", kwargs={"product_id": product_id}))
         return redirect(reverse("product", kwargs={"product_id": product_id}))
 
@@ -168,38 +194,51 @@ def password_reset_request(request):
 
 def delete_product(request, product_id):
     if not request.user.is_superuser:
+        logger.warning(f"Пользователь {request.user} пытался добавить продукт без прав.")
         return redirect('home')
 
     try:
         product = Product.objects.get(id=product_id)
         CartItem.objects.filter(product=product).delete()
         product.delete()
-    except Product.DoesNotExist:
-        pass
+        logger.info(f"Пользователь успешно удалил продукт id={product_id}")
+    except Exception as e:
+        logger.error(f"Ошибка при удалении продукта id={product_id}: {e}", exc_info=True)
 
     return redirect('home')
 
 
 def add_to_cart(request, product_id):
     if not request.user.is_authenticated:
+        logger.warning("Неавторизованный пользователь попытался добавить товар в корзину.")
         return redirect('login')
+    try:
+        product = get_object_or_404(Product, id=product_id)
 
-    product = get_object_or_404(Product, id=product_id)
+        cart_item, created = CartItem.objects.get_or_create(user=request.user, product=product)
+        if not created:
+            cart_item.count += 1
+        cart_item.save()
 
-    cart_item, created = CartItem.objects.get_or_create(user=request.user, product=product)
-    if not created:
-        cart_item.count += 1
-    cart_item.save()
+        logger.info(f"Пользователь {request.user.username} добавил товар {product.id} в корзину.")
+    except Exception as e:
+        logger.error(f"Ошибка при добавлении товара в корзину пользователем {request.user.username}: {e}", exc_info=True)
+
 
     return redirect('home')
 
 
 def remove_from_cart(request, product_id):
     if not request.user.is_authenticated:
+        logger.warning("Неавторизованный пользователь попытался добавить товар в корзину.")
         return redirect('login')
-
-    cart_item = get_object_or_404(CartItem, user=request.user, product_id=product_id)
-    cart_item.delete()
+    try:
+        cart_item = get_object_or_404(CartItem, user=request.user, product_id=product_id)
+        cart_item.delete()
+        logger.info(f"Пользователь успешно удалил продукт id={product_id} из корзины")
+    except Exception as e:
+        logger.error(
+            f"Ошибка при удалении продукта id={product_id} из корзины пользователем {request.user.username}: {e}", exc_info=True)
 
     return redirect('cart')
 

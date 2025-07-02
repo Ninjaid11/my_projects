@@ -144,3 +144,42 @@ CACHES = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080"
 ]
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'my_formatter': {
+            'format': '[{asctime}] {levelname} | {name} | 👤 IvanLog: {message}',
+            'style': '{',
+        },
+        'verbose': {
+            'format': '%(asctime)s [%(levelname)s] %(message)s',
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s',
+        },
+    },
+
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'my_formatter',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+            'formatter': 'my_formatter',
+        },
+    },
+
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
